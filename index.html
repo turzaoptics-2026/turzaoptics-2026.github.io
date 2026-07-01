@@ -35,7 +35,7 @@
         .section-title { text-align: center; font-size: 26px; color: #111; margin-bottom: 35px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .section-title::after { content: ''; display: block; width: 50px; height: 2px; background: #c5a880; margin: 10px auto 0; }
         
-        /* Category-specific Background Colors for distinct feel */
+        /* Category Sections Styling */
         #men-section { background: #f8f9fa; border-top: 1px solid #eee; }
         #women-section { background: #ffffff; border-top: 1px solid #eee; }
         #baby-section { background: #f8f9fa; border-top: 1px solid #eee; }
@@ -133,7 +133,6 @@
                 const rows = data.split('\n').map(row => row.split(','));
                 const headers = rows[0].map(h => h.trim().toLowerCase());
                 
-                // কন্টেইনারগুলো খালি করা
                 const containers = {
                     men: document.getElementById('men-container'),
                     women: document.getElementById('women-container'),
@@ -143,7 +142,6 @@
                 
                 Object.values(containers).forEach(c => c.innerHTML = '');
                 
-                // সেকশনগুলো শো করা
                 document.getElementById('men-section').style.display = 'block';
                 document.getElementById('women-section').style.display = 'block';
                 document.getElementById('baby-section').style.display = 'block';
@@ -188,7 +186,6 @@
                     }
                 }
 
-                // যদি কোনো সেকশনে প্রোডাক্ট না থাকে তবে নোটিশ দেখাবে
                 Object.keys(containers).forEach(key => {
                     if (counts[key] === 0) {
                         containers[key].innerHTML = `<div class="empty-text">No products available in this collection right now.</div>`;
