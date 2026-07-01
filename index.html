@@ -31,12 +31,36 @@
         .cta-btn { display: inline-block; background: #c5a880; color: #111; text-decoration: none; padding: 14px 35px; border-radius: 4px; font-weight: 700; font-size: 16px; transition: all 0.3s; border: 2px solid #c5a880; cursor: pointer; }
         .cta-btn:hover { background: transparent; color: #c5a880; transform: translateY(-2px); }
         
+        /* Search Bar Styling */
+        .search-container {
+            max-width: 600px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+        .search-input {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 16px;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            outline: none;
+            transition: all 0.3s;
+        }
+        .search-input:focus {
+            border-color: #c5a880;
+            box-shadow: 0 10px 25px rgba(197, 168, 128, 0.2);
+        }
+        
         /* Layout Containers for Sections */
         .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
         .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 40px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .section-title::after { content: ''; display: block; width: 50px; height: 2px; background: #c5a880; margin: 10px auto 0; }
         
-        /* Background adjustments for separate feel */
+        /* Background adjustments */
         #men-section { background: #f8f9fa; border-top: 1px solid #eee; }
         #women-section { background: #ffffff; border-top: 1px solid #eee; }
         #kids-section { background: #f8f9fa; border-top: 1px solid #eee; }
@@ -46,7 +70,10 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; min-height: 50px; }
         .product-card { background: #fff; border-radius: 8px; border: 1px solid #eee; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; text-align: center; }
         .product-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.07); border-color: #c5a880; }
-        .product-img { width: 100%; height: 250px; object-fit: cover; background: #f0f0f0; }
+        
+        /* ছবি দ্রুত রেন্ডার হওয়ার জন্য অপ্টিমাইজড সিএসএস */
+        .product-img { width: 100%; height: 250px; object-fit: cover; background: #f0f0f0; content-visibility: auto; }
+        
         .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .product-name { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 8px; }
         .product-desc { font-size: 14px; color: #666; margin-bottom: 15px; font-weight: 400; }
@@ -56,11 +83,7 @@
         .whatsapp-btn:hover { background: transparent; color: #25D366; }
         
         .loading-text { text-align: center; font-size: 18px; color: #666; width: 100%; padding: 40px 0; font-weight: bold; }
-        .empty-text { text-align: center; font-size: 15px; color: #8e8e93; width: 100%; grid-column: 1 / -1; padding: 20px 0; font-style: italic; }
-        
-        .contact-section { background: #111; color: #fff; text-align: center; padding: 60px 20px; border-top: 3px solid #c5a880; }
-        .contact-info { font-size: 16px; color: #aeaeb2; margin-bottom: 25px; }
-        footer { padding: 25px; text-align: center; font-size: 13px; color: #666; background: #000; border-top: 1px solid #222; }
+        #no-results-message { text-align: center; font-size: 18px; color: #8e8e93; padding: 40px 0; font-style: italic; display: none; }
     </style>
 </head>
 <body>
@@ -83,28 +106,28 @@
         <a href="#men-section" class="cta-btn">View Our Collection</a>
     </main>
 
-    <!-- গ্লোবাল লোডিং টেক্সট -->
-    <div id="loading" class="loading-text">Loading premium collections...</div>
+    <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="Search by frame name, design or details...">
+    </div>
 
-    <!-- সেকশন ১: Men -->
+    <div id="loading" class="loading-text">Loading premium collections...</div>
+    <div id="no-results-message">No matching eyewear found! Try searching for something else.</div>
+
     <section class="container" id="men-section" style="display:none;">
         <h2 class="section-title">Men's Collection</h2>
         <div class="products-grid" id="men-container"></div>
     </section>
 
-    <!-- সেকশন ২: Women -->
     <section class="container" id="women-section" style="display:none;">
         <h2 class="section-title">Women's Collection</h2>
         <div class="products-grid" id="women-container"></div>
     </section>
 
-    <!-- সেকশন ৩: Kids -->
     <section class="container" id="kids-section" style="display:none;">
         <h2 class="section-title">Kids Collection</h2>
         <div class="products-grid" id="kids-container"></div>
     </section>
 
-    <!-- সেকশন ৪: Unisex -->
     <section class="container" id="unisex-section" style="display:none;">
         <h2 class="section-title">Unisex Collection</h2>
         <div class="products-grid" id="unisex-container"></div>
@@ -123,79 +146,96 @@
     </footer>
 
     <script>
-        // আপনার জেনারেট করা সাকসেসফুল এপিআই লিঙ্কটি এখানে দেওয়া হলো
         const webAppUrl = "https://script.google.com/macros/s/AKfycbzgKwnSkEEdtiREb3kfUai1p0DV9JVxs-_z2yMGtLkjC-sU_pX9QnkW_7QDNU65hLKW/exec";
         const whatsappNumber = "8801706905971"; 
+        let allProducts = [];
 
         async function fetchProducts() {
             try {
-                const response = await fetch(webAppUrl);
-                const products = await response.json();
+                // গুগল স্ক্রিপ্টের রেসপন্স যেন ব্রাউজার সাময়িকভাবে ক্যাশ করে রাখে তার ব্যবস্থা
+                const response = await fetch(webAppUrl, { cache: "default" });
+                allProducts = await response.json();
                 
-                // কন্টেইনার ডম এলিমেন্ট ম্যাপিং
-                const containers = {
-                    men: document.getElementById('men-container'),
-                    women: document.getElementById('women-container'),
-                    kids: document.getElementById('kids-container'),
-                    unisex: document.getElementById('unisex-container')
-                };
-                
-                // পুরানো কোনো কন্টেন্ট থাকলে রিসেট করা
-                Object.values(containers).forEach(c => c.innerHTML = '');
-                
-                // ডেটা চলে আসার পর সমস্ত সেকশন ডিসপ্লে অন করা এবং লোডিং হাইড করা
-                document.getElementById('men-section').style.display = 'block';
-                document.getElementById('women-section').style.display = 'block';
-                document.getElementById('kids-section').style.display = 'block';
-                document.getElementById('unisex-section').style.display = 'block';
                 document.getElementById('loading').style.display = 'none';
+                renderProducts(allProducts);
 
-                let counts = { men: 0, women: 0, kids: 0, unisex: 0 };
-
-                products.forEach(product => {
-                    // শিটের ক্যাটাগরির বানানে স্পেস বা বড় হাতের লেখা থাকলেও যেন কোড চিনে নেয় (যেমন: "Men " বা "men")
-                    let cat = product.category ? product.category.toLowerCase().trim() : '';
-                    
-                    // চাইল্ড/বেবি ক্যাটাগরি ফিক্স
-                    if (cat === 'kid' || cat === 'baby') { cat = 'kids'; }
-
-                    if (containers[cat]) {
-                        counts[cat]++;
-                        
-                        const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
-                        const encodedMessage = encodeURIComponent(messageText);
-                        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-                        const card = document.createElement('div');
-                        card.className = 'product-card';
-                        card.innerHTML = `
-                            <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x250?text=Image+Error';">
-                            <div class="product-info">
-                                <div>
-                                    <h3 class="product-name">${product.name}</h3>
-                                    <p class="product-desc">${product.description || ''}</p>
-                                </div>
-                                <div>
-                                    <p class="product-price">${product.price}</p>
-                                    <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
-                                </div>
-                            </div>
-                        `;
-                        containers[cat].appendChild(card);
-                    }
-                });
-
-                // যদি কোনো সেকশনে একটি প্রোডাক্টও না থাকে, তবে নোটিফিকেশন দেখানো
-                Object.keys(containers).forEach(key => {
-                    if (counts[key] === 0) {
-                        containers[key].innerHTML = `<div class="empty-text">No products available in this collection right now.</div>`;
-                    }
+                // ডিবাউন্সিং টেকনিক (সার্চ করার স্পিড অপ্টিমাইজেশন)
+                let searchTimeout;
+                document.getElementById('search-input').addEventListener('input', function(e) {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const searchTerm = e.target.value.toLowerCase().trim();
+                        const filtered = allProducts.filter(product => {
+                            return (product.name && product.name.toLowerCase().includes(searchTerm)) || 
+                                   (product.description && product.description.toLowerCase().includes(searchTerm));
+                        });
+                        renderProducts(filtered);
+                    }, 150); // টাইপ করার ১৫০ মিলি-সেকেন্ড পর সার্চ এক্সিকিউট হবে, ব্রাউজার ল্যাগ করবে না
                 });
 
             } catch (error) {
-                console.error("Error loading products:", error);
-                document.getElementById('loading').innerHTML = '<span style="color:red;">Failed to load products. Check your Google Apps Script Deployment configuration.</span>';
+                console.error("Error:", error);
+                document.getElementById('loading').innerHTML = '<span style="color:red;">Failed to load products.</span>';
             }
+        }
+
+        function renderProducts(productsList) {
+            const containers = {
+                men: document.getElementById('men-container'),
+                women: document.getElementById('women-container'),
+                kids: document.getElementById('kids-container'),
+                unisex: document.getElementById('unisex-container')
+            };
+            
+            Object.values(containers).forEach(c => c.innerHTML = '');
+            Object.keys(containers).forEach(key => document.getElementById(`${key}-section`).style.display = 'none');
+            
+            let counts = { men: 0, women: 0, kids: 0, unisex: 0 };
+            let totalRendered = 0;
+
+            // পারফরম্যান্সের জন্য ডকুমেন্ট ফ্র্যাগমেন্ট ব্যবহার (একবারে DOM-এ পুশ করা)
+            const fragments = { men: document.createDocumentFragment(), women: document.createDocumentFragment(), kids: document.createDocumentFragment(), unisex: document.createDocumentFragment() };
+
+            productsList.forEach(product => {
+                let cat = product.category ? product.category.toLowerCase().trim() : '';
+                if (cat === 'kid' || cat === 'baby' || cat === 'kids') { cat = 'kids'; }
+
+                if (containers[cat]) {
+                    counts[cat]++;
+                    totalRendered++;
+                    
+                    const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}`;
+                    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(messageText)}`;
+
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    // এখানে loading="lazy" দেওয়া হয়েছে ছবির লোড ফাস্ট করতে
+                    card.innerHTML = `
+                        <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x250?text=Image+Error';">
+                        <div class="product-info">
+                            <div>
+                                <h3 class="product-name">${product.name}</h3>
+                                <p class="product-desc">${product.description || ''}</p>
+                            </div>
+                            <div>
+                                <p class="product-price">${product.price}</p>
+                                <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
+                            </div>
+                        </div>
+                    `;
+                    fragments[cat].appendChild(card);
+                }
+            });
+
+            // কন্টেইনারে একবারে ডেটা অ্যাপেন্ড করা (ফাস্ট রেন্ডারিং)
+            Object.keys(containers).forEach(key => {
+                if (counts[key] > 0) {
+                    containers[key].appendChild(fragments[key]);
+                    document.getElementById(`${key}-section`).style.display = 'block';
+                }
+            });
+
+            document.getElementById('no-results-message').style.display = totalRendered === 0 ? 'block' : 'none';
         }
 
         window.onload = fetchProducts;
