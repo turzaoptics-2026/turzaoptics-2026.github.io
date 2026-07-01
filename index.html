@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turza Optics | Crystal Clear Premium Eyewear</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
         body { background-color: #fcfcfd; color: #1c1c1e; line-height: 1.6; }
         
+        /* Navigation Header */
         header { background: #111; padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #c5a880; }
-        .brand-text { color: #fff; font-size: 24px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+        .brand-text { color: #fff; font-size: 24px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
         
+        nav { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 5px; }
+        nav a { color: #aeaeb2; text-decoration: none; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s; }
+        nav a:hover { color: #c5a880; }
+        
+        /* Hero Banner */
         .hero-banner { 
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('cover.jpg') no-repeat center center/cover;
             padding: 100px 20px; 
@@ -25,12 +31,19 @@
         .cta-btn { display: inline-block; background: #c5a880; color: #111; text-decoration: none; padding: 14px 35px; border-radius: 4px; font-weight: 700; font-size: 16px; transition: all 0.3s; border: 2px solid #c5a880; cursor: pointer; }
         .cta-btn:hover { background: transparent; color: #c5a880; transform: translateY(-2px); }
         
-        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
-        .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 40px; font-weight: 700; letter-spacing: 1px; }
+        /* Layout Containers for Sections */
+        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
+        .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 40px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .section-title::after { content: ''; display: block; width: 50px; height: 2px; background: #c5a880; margin: 10px auto 0; }
         
+        /* Background adjustments for separate feel */
+        #men-section { background: #f8f9fa; border-top: 1px solid #eee; }
+        #women-section { background: #ffffff; border-top: 1px solid #eee; }
+        #kids-section { background: #f8f9fa; border-top: 1px solid #eee; }
+        #unisex-section { background: #ffffff; border-top: 1px solid #eee; }
+        
         /* Product Grid Styling */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; min-height: 50px; }
         .product-card { background: #fff; border-radius: 8px; border: 1px solid #eee; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; text-align: center; }
         .product-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.07); border-color: #c5a880; }
         .product-img { width: 100%; height: 250px; object-fit: cover; background: #f0f0f0; }
@@ -42,7 +55,8 @@
         .whatsapp-btn { background: #25D366; border: 2px solid #25D366; color: white; width: 100%; padding: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; display: inline-block; transition: all 0.3s; }
         .whatsapp-btn:hover { background: transparent; color: #25D366; }
         
-        .loading-text { text-align: center; font-size: 18px; color: #666; width: 100%; grid-column: 1 / -1; padding: 40px 0; }
+        .loading-text { text-align: center; font-size: 18px; color: #666; width: 100%; padding: 40px 0; font-weight: bold; }
+        .empty-text { text-align: center; font-size: 15px; color: #8e8e93; width: 100%; grid-column: 1 / -1; padding: 20px 0; font-style: italic; }
         
         .contact-section { background: #111; color: #fff; text-align: center; padding: 60px 20px; border-top: 3px solid #c5a880; }
         .contact-info { font-size: 16px; color: #aeaeb2; margin-bottom: 25px; }
@@ -53,28 +67,54 @@
 
     <header>
         <div class="brand-text">TURZA OPTICS</div>
+        <nav>
+            <a href="#men-section">Men</a>
+            <a href="#women-section">Women</a>
+            <a href="#kids-section">Kids</a>
+            <a href="#unisex-section">Unisex</a>
+            <a href="#contact-section">Contact Us</a>
+        </nav>
     </header>
 
     <main class="hero-banner">
         <p class="tagline">Crystal Clear Premium Experience</p>
         <h1 class="main-title">See the world in high definition.</h1>
         <p class="description">Discover a premium eyewear experience tailored for flawless precision and style.</p>
-        <a href="#products-section" class="cta-btn">View Our Collection</a>
+        <a href="#men-section" class="cta-btn">View Our Collection</a>
     </main>
 
-    <!-- Dynamic Products Section -->
-    <section class="container" id="products-section">
-        <h2 class="section-title">Our Premium Products</h2>
-        <div class="products-grid" id="products-container">
-            <div class="loading-text">Loading premium collection...</div>
-        </div>
+    <!-- গ্লোবাল লোডিং টেক্সট -->
+    <div id="loading" class="loading-text">Loading premium collections...</div>
+
+    <!-- সেকশন ১: Men -->
+    <section class="container" id="men-section" style="display:none;">
+        <h2 class="section-title">Men's Collection</h2>
+        <div class="products-grid" id="men-container"></div>
     </section>
 
-    <section class="contact-section">
+    <!-- সেকশন ২: Women -->
+    <section class="container" id="women-section" style="display:none;">
+        <h2 class="section-title">Women's Collection</h2>
+        <div class="products-grid" id="women-container"></div>
+    </section>
+
+    <!-- সেকশন ৩: Kids -->
+    <section class="container" id="kids-section" style="display:none;">
+        <h2 class="section-title">Kids Collection</h2>
+        <div class="products-grid" id="kids-container"></div>
+    </section>
+
+    <!-- সেকশন ৪: Unisex -->
+    <section class="container" id="unisex-section" style="display:none;">
+        <h2 class="section-title">Unisex Collection</h2>
+        <div class="products-grid" id="unisex-container"></div>
+    </section>
+
+    <section class="contact-section" id="contact-section">
         <h2 class="section-title" style="color: #fff;">Visit Us Today</h2>
         <div class="contact-info">
             <p><strong>Location:</strong> Dhaka, Bangladesh</p>
-            <p><strong>Email:</strong> turzaoptics@gmail.com.com | <strong>Support:</strong> 24/7 Premium Assistance</p>
+            <p><strong>Email:</strong> <a href="mailto:turzaoptics@gmail.com" style="color: #c5a880; text-decoration: none;">turzaoptics@gmail.com</a> | <strong>Support:</strong> 24/7 Premium Assistance</p>
         </div>
     </section>
 
@@ -83,66 +123,78 @@
     </footer>
 
     <script>
-        // আপনার দেওয়া গুগল শিট পাবলিশড লিংক থেকে ডেটা রিড করার সঠিক এপিআই অ্যান্ডপয়েন্ট
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZojx0c-QmZxBLjeo5mu6f9dxG-ZF45Vf5_ddXVsvyuuHE-11IyeahnDva8zovW6KqN-zEtj3rRJpZ/pub?output=csv";
-        
-        // এখানে আপনার সঠিক হোয়াটসঅ্যাপ নাম্বারটি দিন (যেমন: '88017XXXXXXXX' ফরম্যাটে)
+        // আপনার জেনারেট করা সাকসেসফুল এপিআই লিঙ্কটি এখানে দেওয়া হলো
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbzgKwnSkEEdtiREb3kfUai1p0DV9JVxs-_z2yMGtLkjC-sU_pX9QnkW_7QDNU65hLKW/exec";
         const whatsappNumber = "8801706905971"; 
 
         async function fetchProducts() {
             try {
-                const response = await fetch(sheetUrl);
-                const data = await response.text();
+                const response = await fetch(webAppUrl);
+                const products = await response.json();
                 
-                // CSV টু জেসন কনভার্টার ফাংশন
-                const rows = data.split('\n').map(row => row.split(','));
-                const headers = rows[0].map(h => h.trim().toLowerCase());
+                // কন্টেইনার ডম এলিমেন্ট ম্যাপিং
+                const containers = {
+                    men: document.getElementById('men-container'),
+                    women: document.getElementById('women-container'),
+                    kids: document.getElementById('kids-container'),
+                    unisex: document.getElementById('unisex-container')
+                };
                 
-                const container = document.getElementById('products-container');
-                container.innerHTML = ''; // লোডিং টেক্সট রিমুভ করুন
+                // পুরানো কোনো কন্টেন্ট থাকলে রিসেট করা
+                Object.values(containers).forEach(c => c.innerHTML = '');
                 
-                let hasProducts = false;
+                // ডেটা চলে আসার পর সমস্ত সেকশন ডিসপ্লে অন করা এবং লোডিং হাইড করা
+                document.getElementById('men-section').style.display = 'block';
+                document.getElementById('women-section').style.display = 'block';
+                document.getElementById('kids-section').style.display = 'block';
+                document.getElementById('unisex-section').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
 
-                for (let i = 1; i < rows.length; i++) {
-                    if (!rows[i] || rows[i].length < headers.length || rows[i][0].trim() === "") continue;
+                let counts = { men: 0, women: 0, kids: 0, unisex: 0 };
+
+                products.forEach(product => {
+                    // শিটের ক্যাটাগরির বানানে স্পেস বা বড় হাতের লেখা থাকলেও যেন কোড চিনে নেয় (যেমন: "Men " বা "men")
+                    let cat = product.category ? product.category.toLowerCase().trim() : '';
                     
-                    hasProducts = true;
-                    let product = {};
-                    headers.forEach((header, index) => {
-                        product[header] = rows[i][index] ? rows[i][index].replace(/"/g, '').trim() : '';
-                    });
+                    // চাইল্ড/বেবি ক্যাটাগরি ফিক্স
+                    if (cat === 'kid' || cat === 'baby') { cat = 'kids'; }
 
-                    // হোয়াটসঅ্যাপ মেসেজ ফরম্যাট তৈরি
-                    const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
-                    const encodedMessage = encodeURIComponent(messageText);
-                    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+                    if (containers[cat]) {
+                        counts[cat]++;
+                        
+                        const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
+                        const encodedMessage = encodeURIComponent(messageText);
+                        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
-                    // প্রোডাক্ট কার্ডের এইচটিএমএল স্ট্রাকচার
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}">
-                        <div class="product-info">
-                            <div>
-                                <h3 class="product-name">${product.name}</h3>
-                                <p class="product-desc">${product.description || ''}</p>
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        card.innerHTML = `
+                            <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x250?text=Image+Error';">
+                            <div class="product-info">
+                                <div>
+                                    <h3 class="product-name">${product.name}</h3>
+                                    <p class="product-desc">${product.description || ''}</p>
+                                </div>
+                                <div>
+                                    <p class="product-price">${product.price}</p>
+                                    <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
+                                </div>
                             </div>
-                            <div>
-                                <p class="product-price">${product.price}</p>
-                                <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                }
+                        `;
+                        containers[cat].appendChild(card);
+                    }
+                });
 
-                if (!hasProducts) {
-                    container.innerHTML = '<div class="loading-text">No products found. Please add data to your Google Sheet.</div>';
-                }
+                // যদি কোনো সেকশনে একটি প্রোডাক্টও না থাকে, তবে নোটিফিকেশন দেখানো
+                Object.keys(containers).forEach(key => {
+                    if (counts[key] === 0) {
+                        containers[key].innerHTML = `<div class="empty-text">No products available in this collection right now.</div>`;
+                    }
+                });
 
             } catch (error) {
                 console.error("Error loading products:", error);
-                document.getElementById('products-container').innerHTML = '<div class="loading-text" style="color:red;">Failed to load products. Check your Google Sheet sharing settings.</div>';
+                document.getElementById('loading').innerHTML = '<span style="color:red;">Failed to load products. Check your Google Apps Script Deployment configuration.</span>';
             }
         }
 
