@@ -84,31 +84,26 @@
 
     <div id="loading" class="loading-text">Loading premium collections...</div>
 
-    <!-- 1. Men Section -->
     <section class="container" id="men-section" style="display:none;">
         <h2 class="section-title">Men's Collection</h2>
         <div class="products-grid" id="men-container"></div>
     </section>
 
-    <!-- 2. Women Section -->
     <section class="container" id="women-section" style="display:none;">
         <h2 class="section-title">Women's Collection</h2>
         <div class="products-grid" id="women-container"></div>
     </section>
 
-    <!-- 3. Kids Section -->
     <section class="container" id="baby-section" style="display:none;">
         <h2 class="section-title">Kids Collection</h2>
         <div class="products-grid" id="baby-container"></div>
     </section>
 
-    <!-- 4. Unisex Section -->
     <section class="container" id="unisex-section" style="display:none;">
         <h2 class="section-title">Unisex Collection</h2>
         <div class="products-grid" id="unisex-container"></div>
     </section>
 
-    <!-- Contact Section -->
     <section class="contact-section" id="contact-section">
         <h2 class="section-title" style="color: #fff;">Visit Us Today</h2>
         <div class="contact-info">
@@ -122,11 +117,11 @@
     </footer>
 
     <script>
-        // আপনার নতুন গুগল শিটের সঠিক আইডি এবং লিঙ্ক এখানে যুক্ত করা হয়েছে
+        // গুগল শিট ডাইরেক্ট এক্সপোর্ট লিঙ্ক এবং হোয়াটসঅ্যাপ নাম্বার
         const sheetUrl = "https://docs.google.com/spreadsheets/d/1HlJaTwu8ikE4vbsDkQstuJRCNURZdhlyWYcqG30aaNc/export?format=csv";
         const whatsappNumber = "8801706905971"; 
 
-        // এডভান্সড CSV পার্সার যা জটিল ইমেজের ভেতরের কমা হ্যান্ডেল করবে
+        // এডভান্সড কমা এবং কোটেশন হ্যান্ডেলার CSV পার্সার
         function parseCSV(text) {
             let p = '', r = [];
             let q = false;
@@ -153,11 +148,8 @@
                 const data = await response.text();
                 
                 const rows = parseCSV(data);
-                if (rows.length === 0) return;
+                if (rows.length <= 1) return; // শিট খালি হলে ফেরত যাবে
 
-                // কলামের নাম বড় হাতের বা ছোট হাতের যাই হোক, সব লোয়ারকেস করে ম্যাচ করানোর লজিক
-                const headers = rows[0].map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
-                
                 const containers = {
                     men: document.getElementById('men-container'),
                     women: document.getElementById('women-container'),
@@ -165,8 +157,10 @@
                     unisex: document.getElementById('unisex-container')
                 };
                 
+                // কন্টেইনারগুলো খালি করা
                 Object.values(containers).forEach(c => c.innerHTML = '');
                 
+                // সেকশনগুলো ভিজিবল করা
                 document.getElementById('men-section').style.display = 'block';
                 document.getElementById('women-section').style.display = 'block';
                 document.getElementById('baby-section').style.display = 'block';
@@ -175,38 +169,40 @@
 
                 let counts = { men: 0, women: 0, baby: 0, unisex: 0 };
 
+                // লাইন ১ (হেডার) বাদ দিয়ে লাইন ২ থেকে ডেটা রিড করা শুরু
                 for (let i = 1; i < rows.length; i++) {
-                    if (!rows[i] || rows[i].length < headers.length || rows[i][0].trim() === "") continue;
+                    let rowData = rows[i];
+                    if (!rowData || rowData.length < 3 || rowData[0].trim() === "") continue;
                     
-                    let product = {};
-                    headers.forEach((header, index) => {
-                        product[header] = rows[i][index] ? rows[i][index].trim() : '';
-                    });
+                    // কলামের নামের ওপর নির্ভর না করে সরাসরি সিরিয়াল অনুযায়ী ডেটা অ্যাসাইন (A, B, C, D, E)
+                    let pName = rowData[0] ? rowData[0].trim() : 'Premium Eyewear';
+                    let pPrice = rowData[1] ? rowData[1].trim() : 'Contact for Price';
+                    let pImage = rowData[2] ? rowData[2].trim() : 'https://via.placeholder.com/300x250?text=No+Image';
+                    let pDesc = rowData[3] ? rowData[3].trim() : '';
+                    let pCatRaw = rowData[4] ? rowData[4].toLowerCase().replace(/[^a-z0-9]/g, '').trim() : '';
 
-                    // ক্যাটাগরি ফিল্ড ম্যাচ করার শক্তিশালী ট্রিম লজিক
-                    let cat = product.category ? product.category.toLowerCase().replace(/[^a-z0-9]/g, '').trim() : '';
-                    
-                    // শিটে যদি 'kids' বা 'kid' লেখা থাকে তবে সেটি 'baby' সেকশনে চলে যাবে
+                    // ক্যাটাগরি ম্যাচিং লজিক
+                    let cat = pCatRaw;
                     if (cat === 'kids' || cat === 'kid') { cat = 'baby'; }
 
                     if (containers[cat]) {
                         counts[cat]++;
                         
-                        const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
+                        const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${pName}\n*Price:* ${pPrice}\n\nPlease confirm availability.`;
                         const encodedMessage = encodeURIComponent(messageText);
                         const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
                         const card = document.createElement('div');
                         card.className = 'product-card';
                         card.innerHTML = `
-                            <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}">
+                            <img src="${pImage}" class="product-img" alt="${pName}" onerror="this.src='https://via.placeholder.com/300x250?text=Image+Error';">
                             <div class="product-info">
                                 <div>
-                                    <h3 class="product-name">${product.name}</h3>
-                                    <p class="product-desc">${product.description || ''}</p>
+                                    <h3 class="product-name">${pName}</h3>
+                                    <p class="product-desc">${pDesc}</p>
                                 </div>
                                 <div>
-                                    <p class="product-price">${product.price}</p>
+                                    <p class="product-price">${pPrice}</p>
                                     <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
                                 </div>
                             </div>
@@ -215,6 +211,7 @@
                     }
                 }
 
+                // খালি সেকশনগুলোর জন্য নোটিশ দেখানো
                 Object.keys(containers).forEach(key => {
                     if (counts[key] === 0) {
                         containers[key].innerHTML = `<div class="empty-text">No products available in this collection right now.</div>`;
