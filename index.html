@@ -7,15 +7,33 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f9f9fb; color: #1e2022; line-height: 1.6; }
-        header { background: #fff; border-bottom: 1px solid #eaeaea; padding: 20px; text-align: center; }
-        h1 { color: #111; font-size: 24px; letter-spacing: 1px; }
-        .hero { max-width: 800px; margin: 60px auto; padding: 40px 20px; text-align: center; }
-        .tagline { font-size: 14px; text-transform: uppercase; color: #777; letter-spacing: 2px; margin-bottom: 10px; }
-        .main-title { font-size: 42px; color: #111; line-height: 1.2; margin-bottom: 20px; font-weight: 700; }
-        .description { font-size: 18px; color: #555; max-width: 600px; margin: 0 auto 30px; }
-        .cta-btn { display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 15px 35px; border-radius: 4px; font-weight: 600; font-size: 16px; transition: background 0.2s; }
-        .cta-btn:hover { background: #333; }
-        footer { margin-top: 100px; padding: 20px; text-align: center; font-size: 13px; color: #aaa; border-top: 1px solid #eaeaea; }
+        header { background: #fff; border-bottom: 1px solid #eaeaea; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+        header h1 { color: #111; font-size: 24px; letter-spacing: 2px; font-weight: 700; }
+        
+        .hero { max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; }
+        .tagline { font-size: 13px; text-transform: uppercase; color: #777; letter-spacing: 3px; margin-bottom: 15px; font-weight: 600; }
+        .main-title { font-size: 48px; color: #111; line-height: 1.2; margin-bottom: 20px; font-weight: 700; }
+        .description { font-size: 19px; color: #555; max-width: 650px; margin: 0 auto 35px; }
+        
+        .cta-btn { display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 16px 40px; border-radius: 4px; font-weight: 600; font-size: 16px; transition: background 0.2s, transform 0.2s; }
+        .cta-btn:hover { background: #333; transform: translateY(-2px); }
+        
+        .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 40px; font-weight: 700; letter-spacing: 1px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+        
+        /* Grid Layout for Features & Products */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1-fr)); gap: 30px; margin-bottom: 40px; }
+        .card { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eee; text-align: center; transition: box-shadow 0.3s; }
+        .card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .card h3 { font-size: 20px; margin-bottom: 15px; color: #111; }
+        .card p { color: #666; font-size: 15px; }
+        
+        /* Contact Section */
+        .contact-section { background: #fff; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; padding: 60px 20px; }
+        .contact-info { font-size: 16px; color: #444; margin-bottom: 25px; }
+        .contact-info p { margin: 8px 0; }
+        
+        footer { padding: 30px; text-align: center; font-size: 13px; color: #aaa; background: #fff; }
     </style>
 </head>
 <body>
@@ -24,12 +42,63 @@
         <h1>TURZA OPTICS</h1>
     </header>
 
+    <!-- Hero Section -->
     <main class="hero">
         <p class="tagline">Crystal Clear Premium Experience</p>
         <h1 class="main-title">See the world in high definition.</h1>
         <p class="description">Discover a premium eyewear experience tailored for flawless precision and style. Upgrade your look and vision today.</p>
-        <a href="#" class="cta-btn">Shop the Collection</a>
+        <a href="#contact" class="cta-btn">Book an Eye Test Today</a>
     </main>
+
+    <!-- Collection Section -->
+    <section style="background: #f1f1f4;">
+        <div class="container">
+            <h2 class="section-title">Our Premium Categories</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Luxury Frames</h3>
+                    <p>Handcrafted, durable designs that complement your unique style and facial structure perfectly.</p>
+                </div>
+                <div class="card">
+                    <h3>Premium Lenses</h3>
+                    <p>Advanced, scratch-resistant technology engineered for ultimate clarity and absolute precision.</p>
+                </div>
+                <div class="card">
+                    <h3>Sun Protection</h3>
+                    <p>100% UV protected sunglasses designed to keep your eyes safe without compromising on elegance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container">
+        <h2 class="section-title">Why Choose Turza Optics?</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Expert Fitting</h3>
+                <p>Personalized optical measurements to ensure your customized frames fit comfortably all day long.</p>
+            </div>
+            <div class="card">
+                <h3>Crystal Clarity</h3>
+                <p>High-definition visual clarity tailored explicitly to meet your everyday lifestyle and professional needs.</p>
+            </div>
+            <div class="card">
+                <h3>Premium Service</h3>
+                <p>Dedicated after-sales support, free alignment checks, and adjustments anytime you need them.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <h2 class="section-title">Visit Us Today</h2>
+        <div class="contact-info">
+            <p><strong>Location:</strong> Dhaka, Bangladesh</p>
+            <p><strong>Email:</strong> info@turzaoptics.com | <strong>Support:</strong> 24/7 Premium Assistance</p>
+        </div>
+        <a href="mailto:info@turzaoptics.com" class="cta-btn">Schedule an Appointment</a>
+    </section>
 
     <footer>
         &copy; 2026 Turza Optics. All Rights Reserved.
