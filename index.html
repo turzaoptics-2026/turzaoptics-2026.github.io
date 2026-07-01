@@ -19,9 +19,7 @@
         /* Hero Banner */
         .hero-banner { 
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('cover.jpg') no-repeat center center/cover;
-            padding: 120px 20px; 
-            text-align: center; 
-            color: #fff;
+            padding: 120px 20px; text-align: center; color: #fff;
         }
         .tagline { font-size: 13px; text-transform: uppercase; color: #c5a880; letter-spacing: 3px; margin-bottom: 15px; font-weight: 600; }
         .main-title { font-size: 44px; line-height: 1.2; margin-bottom: 20px; font-weight: 700; }
@@ -30,19 +28,18 @@
         .cta-btn { display: inline-block; background: #c5a880; color: #111; text-decoration: none; padding: 14px 35px; border-radius: 4px; font-weight: 700; font-size: 16px; transition: all 0.3s; border: 2px solid #c5a880; }
         .cta-btn:hover { background: transparent; color: #c5a880; transform: translateY(-2px); }
         
-        /* Section Styling */
+        /* Containers Layout */
         .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
         .section-title { text-align: center; font-size: 26px; color: #111; margin-bottom: 35px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .section-title::after { content: ''; display: block; width: 50px; height: 2px; background: #c5a880; margin: 10px auto 0; }
         
-        /* Category Sections Styling */
         #men-section { background: #f8f9fa; border-top: 1px solid #eee; }
         #women-section { background: #ffffff; border-top: 1px solid #eee; }
         #baby-section { background: #f8f9fa; border-top: 1px solid #eee; }
         #unisex-section { background: #ffffff; border-top: 1px solid #eee; }
         
-        /* Product Grid */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; min-height: 100px; }
+        /* Product Grid Grid */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; min-height: 50px; }
         .product-card { background: #fff; border-radius: 8px; border: 1px solid #eee; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; text-align: center; }
         .product-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.07); border-color: #c5a880; }
         .product-img { width: 100%; height: 250px; object-fit: cover; background: #f0f0f0; }
@@ -55,7 +52,7 @@
         .whatsapp-btn:hover { background: transparent; color: #25D366; }
         
         .empty-text { text-align: center; font-size: 15px; color: #8e8e93; width: 100%; grid-column: 1 / -1; padding: 20px 0; font-style: italic; }
-        .loading-text { text-align: center; font-size: 18px; color: #666; width: 100%; padding: 40px 0; }
+        .loading-text { text-align: center; font-size: 18px; color: #666; width: 100%; padding: 40px 0; font-weight: bold; }
         
         .contact-section { background: #111; color: #fff; text-align: center; padding: 60px 20px; border-top: 3px solid #c5a880; }
         .contact-info { font-size: 16px; color: #aeaeb2; margin-bottom: 25px; }
@@ -84,21 +81,25 @@
 
     <div id="loading" class="loading-text">Loading premium collections...</div>
 
+    <!-- 1. Men Section -->
     <section class="container" id="men-section" style="display:none;">
         <h2 class="section-title">Men's Collection</h2>
         <div class="products-grid" id="men-container"></div>
     </section>
 
+    <!-- 2. Women Section -->
     <section class="container" id="women-section" style="display:none;">
         <h2 class="section-title">Women's Collection</h2>
         <div class="products-grid" id="women-container"></div>
     </section>
 
+    <!-- 3. Kids Section -->
     <section class="container" id="baby-section" style="display:none;">
         <h2 class="section-title">Kids Collection</h2>
         <div class="products-grid" id="baby-container"></div>
     </section>
 
+    <!-- 4. Unisex Section -->
     <section class="container" id="unisex-section" style="display:none;">
         <h2 class="section-title">Unisex Collection</h2>
         <div class="products-grid" id="unisex-container"></div>
@@ -117,39 +118,15 @@
     </footer>
 
     <script>
-        // গুগল শিট ডাইরেক্ট এক্সপোর্ট লিঙ্ক এবং হোয়াটসঅ্যাপ নাম্বার
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/1HlJaTwu8ikE4vbsDkQstuJRCNURZdhlyWYcqG30aaNc/export?format=csv";
+        // আপনার সাকসেসফুলি জেনারেট করা অ্যাপস স্ক্রিপ্ট লিঙ্ক এখানে যুক্ত করা হয়েছে
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbzgKwnSkEEdtiREb3kfUai1p0DV9JVxs-_z2yMGtLkjC-sU_pX9QnkW_7QDNU65hLKW/exec";
         const whatsappNumber = "8801706905971"; 
-
-        // এডভান্সড কমা এবং কোটেশন হ্যান্ডেলার CSV পার্সার
-        function parseCSV(text) {
-            let p = '', r = [];
-            let q = false;
-            let row = [''];
-            for (let i = 0; i < text.length; i++) {
-                let c = text[i];
-                if (c === '"') { q = !q; continue; }
-                if (!q && c === ',') { row.push(''); continue; }
-                if (!q && (c === '\r' || c === '\n')) {
-                    if (c === '\r' && text[i+1] === '\n') { i++; }
-                    r.push(row);
-                    row = [''];
-                    continue;
-                }
-                row[row.length-1] += c;
-            }
-            if (row.length > 1 || row[0] !== '') { r.push(row); }
-            return r;
-        }
 
         async function fetchProducts() {
             try {
-                const response = await fetch(sheetUrl);
-                const data = await response.text();
+                const response = await fetch(webAppUrl);
+                const products = await response.json();
                 
-                const rows = parseCSV(data);
-                if (rows.length <= 1) return; // শিট খালি হলে ফেরত যাবে
-
                 const containers = {
                     men: document.getElementById('men-container'),
                     women: document.getElementById('women-container'),
@@ -157,10 +134,8 @@
                     unisex: document.getElementById('unisex-container')
                 };
                 
-                // কন্টেইনারগুলো খালি করা
                 Object.values(containers).forEach(c => c.innerHTML = '');
                 
-                // সেকশনগুলো ভিজিবল করা
                 document.getElementById('men-section').style.display = 'block';
                 document.getElementById('women-section').style.display = 'block';
                 document.getElementById('baby-section').style.display = 'block';
@@ -169,49 +144,37 @@
 
                 let counts = { men: 0, women: 0, baby: 0, unisex: 0 };
 
-                // লাইন ১ (হেডার) বাদ দিয়ে লাইন ২ থেকে ডেটা রিড করা শুরু
-                for (let i = 1; i < rows.length; i++) {
-                    let rowData = rows[i];
-                    if (!rowData || rowData.length < 3 || rowData[0].trim() === "") continue;
-                    
-                    // কলামের নামের ওপর নির্ভর না করে সরাসরি সিরিয়াল অনুযায়ী ডেটা অ্যাসাইন (A, B, C, D, E)
-                    let pName = rowData[0] ? rowData[0].trim() : 'Premium Eyewear';
-                    let pPrice = rowData[1] ? rowData[1].trim() : 'Contact for Price';
-                    let pImage = rowData[2] ? rowData[2].trim() : 'https://via.placeholder.com/300x250?text=No+Image';
-                    let pDesc = rowData[3] ? rowData[3].trim() : '';
-                    let pCatRaw = rowData[4] ? rowData[4].toLowerCase().replace(/[^a-z0-9]/g, '').trim() : '';
-
-                    // ক্যাটাগরি ম্যাচিং লজিক
-                    let cat = pCatRaw;
+                products.forEach(product => {
+                    // ক্যাটাগরি ফিল্ড ম্যাচ করার প্রফেশনাল লজিক
+                    let cat = product.category ? product.category.toLowerCase().replace(/[^a-z0-9]/g, '').trim() : '';
                     if (cat === 'kids' || cat === 'kid') { cat = 'baby'; }
 
                     if (containers[cat]) {
                         counts[cat]++;
                         
-                        const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${pName}\n*Price:* ${pPrice}\n\nPlease confirm availability.`;
+                        const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
                         const encodedMessage = encodeURIComponent(messageText);
                         const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
                         const card = document.createElement('div');
                         card.className = 'product-card';
                         card.innerHTML = `
-                            <img src="${pImage}" class="product-img" alt="${pName}" onerror="this.src='https://via.placeholder.com/300x250?text=Image+Error';">
+                            <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x250?text=Image+Error';">
                             <div class="product-info">
                                 <div>
-                                    <h3 class="product-name">${pName}</h3>
-                                    <p class="product-desc">${pDesc}</p>
+                                    <h3 class="product-name">${product.name}</h3>
+                                    <p class="product-desc">${product.description || ''}</p>
                                 </div>
                                 <div>
-                                    <p class="product-price">${pPrice}</p>
+                                    <p class="product-price">${product.price}</p>
                                     <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
                                 </div>
                             </div>
                         `;
                         containers[cat].appendChild(card);
                     }
-                }
+                });
 
-                // খালি সেকশনগুলোর জন্য নোটিশ দেখানো
                 Object.keys(containers).forEach(key => {
                     if (counts[key] === 0) {
                         containers[key].innerHTML = `<div class="empty-text">No products available in this collection right now.</div>`;
@@ -220,7 +183,7 @@
 
             } catch (error) {
                 console.error("Error loading products:", error);
-                document.getElementById('loading').innerHTML = '<span style="color:red;">Failed to load products. Make sure your Google Sheet is shared as "Anyone with the link".</span>';
+                document.getElementById('loading').innerHTML = '<span style="color:red;">Failed to load products. Check your Google Apps Script Deployment configuration.</span>';
             }
         }
 
