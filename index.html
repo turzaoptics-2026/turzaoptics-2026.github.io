@@ -122,27 +122,39 @@
     </footer>
 
     <script>
-        // স্ক্রিনশটে থাকা আপনার নতুন গুগল শিটের আইডি এখানে লিঙ্ক করা হয়েছে
         const sheetUrl = "https://docs.google.com/spreadsheets/d/1HlJaTwu8ikE4vbsDkQstuJRCNURZdhlyWYcqG30aaNc/export?format=csv";
         const whatsappNumber = "8801706905971"; 
+
+        // এডভান্সড CSV পার্সার যা লিংকের ভেতরের কমা ইগনোর করতে পারে
+        function parseCSV(text) {
+            let p = '', r = [];
+            let q = false;
+            let row = [''];
+            for (let i=0; i<text.length; i++) {
+                let c = text[i];
+                if (c === '"') { q = !q; continue; }
+                if (!q && c === ',') { row.push(''); continue; }
+                if (!q && (c === '\r' || c === '\n')) {
+                    if (c === '\r' && text[i+1] === '\n') { i++; }
+                    r.push(row);
+                    row = [''];
+                    continue;
+                }
+                row[row.length-1] += c;
+            }
+            if (row.length > 1 || row[0] !== '') { r.push(row); }
+            return r;
+        }
 
         async function fetchProducts() {
             try {
                 const response = await fetch(sheetUrl);
                 const data = await response.text();
                 
-                // CSV parsing considering potential commas inside quotes
-                const rows = [];
-                const lines = data.split('\n');
-                lines.forEach(line => {
-                    if(line.trim() !== "") {
-                        // Simple regex to split by comma but ignore commas inside quotes
-                        const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
-                        rows.push(matches);
-                    }
-                });
-                
-                const headers = rows[0].map(h => h.replace(/"/g, '').trim().toLowerCase());
+                const rows = parseCSV(data);
+                if (rows.length === 0) return;
+
+                const headers = rows[0].map(h => h.trim().toLowerCase());
                 
                 const containers = {
                     men: document.getElementById('men-container'),
@@ -166,7 +178,7 @@
                     
                     let product = {};
                     headers.forEach((header, index) => {
-                        product[header] = rows[i][index] ? rows[i][index].replace(/"/g, '').trim() : '';
+                        product[header] = rows[i][index] ? rows[i][index].trim() : '';
                     });
 
                     const cat = product.category ? product.category.toLowerCase().trim() : '';
