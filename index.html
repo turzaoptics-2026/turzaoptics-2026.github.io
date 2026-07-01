@@ -26,8 +26,13 @@
         .cta-btn:hover { background: transparent; color: #c5a880; transform: translateY(-2px); }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
-        .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 40px; font-weight: 700; letter-spacing: 1px; }
+        .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 25px; font-weight: 700; letter-spacing: 1px; }
         .section-title::after { content: ''; display: block; width: 50px; height: 2px; background: #c5a880; margin: 10px auto 0; }
+        
+        /* Category Filter Tabs */
+        .filter-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .tab-btn { background: #fff; border: 1px solid #ddd; color: #111; padding: 10px 25px; font-size: 15px; font-weight: 600; border-radius: 30px; cursor: pointer; transition: all 0.3s; }
+        .tab-btn:hover, .tab-btn.active { background: #111; color: #fff; border-color: #111; }
         
         /* Product Grid Styling */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
@@ -62,9 +67,18 @@
         <a href="#products-section" class="cta-btn">View Our Collection</a>
     </main>
 
-    <!-- Dynamic Products Section -->
+    <!-- Dynamic Products Section with Filters -->
     <section class="container" id="products-section">
         <h2 class="section-title">Our Premium Products</h2>
+        
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all')">All Collection</button>
+            <button class="tab-btn" onclick="filterCategory('men')">Men</button>
+            <button class="tab-btn" onclick="filterCategory('women')">Women</button>
+            <button class="tab-btn" onclick="filterCategory('baby')">Baby</button>
+        </div>
+
         <div class="products-grid" id="products-container">
             <div class="loading-text">Loading premium collection...</div>
         </div>
@@ -83,66 +97,83 @@
     </footer>
 
     <script>
-        // আপনার দেওয়া গুগল শিট পাবলিশড লিংক থেকে ডেটা রিড করার সঠিক এপিআই অ্যান্ডপয়েন্ট
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZojx0c-QmZxBLjeo5mu6f9dxG-ZF45Vf5_ddXVsvyuuHE-11IyeahnDva8zovW6KqN-zEtj3rRJpZ/pub?output=csv";
-        
-        // এখানে আপনার সঠিক হোয়াটসঅ্যাপ নাম্বারটি দিন (যেমন: '88017XXXXXXXX' ফরম্যাটে)
         const whatsappNumber = "8801706905971"; 
+        let allProducts = []; // সব প্রোডাক্ট স্টোর করার ভেরিয়েবল
 
         async function fetchProducts() {
             try {
                 const response = await fetch(sheetUrl);
                 const data = await response.text();
                 
-                // CSV টু জেসন কনভার্টার ফাংশন
                 const rows = data.split('\n').map(row => row.split(','));
                 const headers = rows[0].map(h => h.trim().toLowerCase());
                 
-                const container = document.getElementById('products-container');
-                container.innerHTML = ''; // লোডিং টেক্সট রিমুভ করুন
-                
-                let hasProducts = false;
+                allProducts = []; // রিসেট
 
                 for (let i = 1; i < rows.length; i++) {
                     if (!rows[i] || rows[i].length < headers.length || rows[i][0].trim() === "") continue;
                     
-                    hasProducts = true;
                     let product = {};
                     headers.forEach((header, index) => {
                         product[header] = rows[i][index] ? rows[i][index].replace(/"/g, '').trim() : '';
                     });
-
-                    // হোয়াটসঅ্যাপ মেসেজ ফরম্যাট তৈরি
-                    const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
-                    const encodedMessage = encodeURIComponent(messageText);
-                    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-                    // প্রোডাক্ট কার্ডের এইচটিএমএল স্ট্রাকচার
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}">
-                        <div class="product-info">
-                            <div>
-                                <h3 class="product-name">${product.name}</h3>
-                                <p class="product-desc">${product.description || ''}</p>
-                            </div>
-                            <div>
-                                <p class="product-price">${product.price}</p>
-                                <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
+                    allProducts.push(product);
                 }
 
-                if (!hasProducts) {
-                    container.innerHTML = '<div class="loading-text">No products found. Please add data to your Google Sheet.</div>';
-                }
+                displayProducts(allProducts); // শুরুতে সব প্রোডাক্ট দেখাবে
 
             } catch (error) {
                 console.error("Error loading products:", error);
                 document.getElementById('products-container').innerHTML = '<div class="loading-text" style="color:red;">Failed to load products. Check your Google Sheet sharing settings.</div>';
+            }
+        }
+
+        function displayProducts(productsToRender) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = ''; 
+            
+            if (productsToRender.length === 0) {
+                container.innerHTML = '<div class="loading-text">No products found in this category.</div>';
+                return;
+            }
+
+            productsToRender.forEach(product => {
+                const messageText = `Hello Turza Optics, I want to order this eyewear:\n\n*Product:* ${product.name}\n*Price:* ${product.price}\n\nPlease confirm availability.`;
+                const encodedMessage = encodeURIComponent(messageText);
+                const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.image || 'https://via.placeholder.com/300x250?text=No+Image'}" class="product-img" alt="${product.name}">
+                    <div class="product-info">
+                        <div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-desc">${product.description || ''}</p>
+                        </div>
+                        <div>
+                            <p class="product-price">${product.price}</p>
+                            <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Order via WhatsApp</a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ক্যাটাগরি ফিল্টার করার মেইন ফাংশন
+        function filterCategory(categoryName) {
+            // একটিভ বাটন স্টাইল পরিবর্তন
+            const buttons = document.querySelectorAll('.filter-tabs .tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (categoryName === 'all') {
+                displayProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => p.category && p.category.toLowerCase() === categoryName);
+                displayProducts(filtered);
             }
         }
 
