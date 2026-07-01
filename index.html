@@ -6,44 +6,64 @@
     <title>Turza Optics | Crystal Clear Premium Eyewear</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f9f9fb; color: #1e2022; line-height: 1.6; }
-        header { background: #fff; border-bottom: 1px solid #eaeaea; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
-        header h1 { color: #111; font-size: 24px; letter-spacing: 2px; font-weight: 700; }
+        body { background-color: #fcfcfd; color: #1c1c1e; line-height: 1.6; }
         
-        .hero { max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; }
-        .tagline { font-size: 13px; text-transform: uppercase; color: #777; letter-spacing: 3px; margin-bottom: 15px; font-weight: 600; }
-        .main-title { font-size: 48px; color: #111; line-height: 1.2; margin-bottom: 20px; font-weight: 700; }
-        .description { font-size: 19px; color: #555; max-width: 650px; margin: 0 auto 35px; }
+        /* Premium Theme Colors: Gold (#c5a880) and Black (#111) */
+        header { background: #111; padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #c5a880; }
         
-        .cta-btn { display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 16px 40px; border-radius: 4px; font-weight: 600; font-size: 16px; transition: background 0.2s, transform 0.2s; }
-        .cta-btn:hover { background: #333; transform: translateY(-2px); }
+        /* Logo Styling */
+        .logo-container img { max-height: 50px; width: auto; display: block; margin: 0 auto; }
+        .brand-text { color: #fff; font-size: 24px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+        
+        /* Cover Photo & Hero Section Combo */
+        .hero-banner { 
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('cover.jpg') no-repeat center center/cover;
+            padding: 120px 20px; 
+            text-align: center; 
+            color: #fff;
+        }
+        
+        .tagline { font-size: 13px; text-transform: uppercase; color: #c5a880; letter-spacing: 3px; margin-bottom: 15px; font-weight: 600; }
+        .main-title { font-size: 48px; line-height: 1.2; margin-bottom: 20px; font-weight: 700; }
+        .description { font-size: 19px; color: #e5e5ea; max-width: 650px; margin: 0 auto 35px; }
+        
+        /* Premium Buttons */
+        .cta-btn { display: inline-block; background: #c5a880; color: #111; text-decoration: none; padding: 16px 40px; border-radius: 4px; font-weight: 700; font-size: 16px; transition: all 0.3s; border: 2px solid #c5a880; }
+        .cta-btn:hover { background: transparent; color: #c5a880; transform: translateY(-2px); }
         
         .section-title { text-align: center; font-size: 28px; color: #111; margin-bottom: 40px; font-weight: 700; letter-spacing: 1px; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+        .section-title::after { content: ''; display: block; width: 50px; height: 2px; background: #c5a880; margin: 10px auto 0; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px; }
         
-        /* Grid Layout for Features & Products */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1-fr)); gap: 30px; margin-bottom: 40px; }
-        .card { background: #fff; padding: 30px; border-radius: 8px; border: 1px solid #eee; text-align: center; transition: box-shadow 0.3s; }
-        .card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        /* Grid Layout */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: #fff; padding: 40px 30px; border-radius: 8px; border: 1px solid #eee; text-align: center; transition: all 0.3s; }
+        .card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: #c5a880; }
         .card h3 { font-size: 20px; margin-bottom: 15px; color: #111; }
         .card p { color: #666; font-size: 15px; }
         
         /* Contact Section */
-        .contact-section { background: #fff; border-top: 1px solid #eee; border-bottom: 1px solid #eee; text-align: center; padding: 60px 20px; }
-        .contact-info { font-size: 16px; color: #444; margin-bottom: 25px; }
+        .contact-section { background: #111; color: #fff; text-align: center; padding: 80px 20px; border-top: 3px solid #c5a880; }
+        .contact-section .section-title { color: #fff; }
+        .contact-info { font-size: 16px; color: #aeaeb2; margin-bottom: 35px; }
         .contact-info p { margin: 8px 0; }
         
-        footer { padding: 30px; text-align: center; font-size: 13px; color: #aaa; background: #fff; }
+        footer { padding: 30px; text-align: center; font-size: 13px; color: #666; background: #000; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>TURZA OPTICS</h1>
+        <div class="logo-container">
+            <!-- যদি লোগো ইমেজ থাকে তবে নিচের লাইনটি কাজ করবে -->
+            <!-- <img src="logo.png" alt="Turza Optics Logo"> -->
+            <!-- ইমেজ না থাকলে ব্যাকআপ হিসেবে টেক্সট লোগো দেখাবে -->
+            <div class="brand-text">TURZA OPTICS</div>
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <main class="hero">
+    <!-- Hero Section with Background Cover Photo -->
+    <main class="hero-banner">
         <p class="tagline">Crystal Clear Premium Experience</p>
         <h1 class="main-title">See the world in high definition.</h1>
         <p class="description">Discover a premium eyewear experience tailored for flawless precision and style. Upgrade your look and vision today.</p>
@@ -51,7 +71,7 @@
     </main>
 
     <!-- Collection Section -->
-    <section style="background: #f1f1f4;">
+    <section style="background: #f8f9fa;">
         <div class="container">
             <h2 class="section-title">Our Premium Categories</h2>
             <div class="grid">
